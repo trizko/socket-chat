@@ -26,11 +26,13 @@ func main() {
 	}
 }
 func asyncRead(conn net.Conn, message chan string) {
-	reader, _ := bufio.NewReader(conn).ReadString('\n')
-	message <- ("Message from server: " + reader + "\n")
+	reader, err := bufio.NewReader(conn).ReadString('\n')
+	check(err)
+	message <- ("Message from server: " + reader)
 }
 func asyncWrite(conn net.Conn, message chan string) {
-	reader, _ := bufio.NewReader(os.Stdin).ReadString('\n')
+	reader, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	check(err)
 	conn.Write([]byte(reader))
 	message <- ""
 }
